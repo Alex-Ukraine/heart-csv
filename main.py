@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 result = pd.read_csv('heart 1.csv', delimiter=',')
-result = result[result.thalachh >= 140]
+result = result[result.trtbps >= 140]
 
 
 def to_match(age):
@@ -20,9 +20,12 @@ def to_match(age):
         return "75-84"
 
 
-result['diapazons'] = result['age'].apply(lambda x: to_match(x))
+result['age_ranges'] = result['age'].apply(lambda x: to_match(x))
+result = result.groupby('age_ranges').thalachh.mean()
 
-result = result.groupby('diapazons').thalachh.mean()
+plt.title("Bar chart age range relate to average heartbeat")
+plt.xlabel("age ranges")
+plt.ylabel("average heartbeat")
 result.plot(kind='bar')
 
 if __name__ == '__main__':
